@@ -1,0 +1,13 @@
+common_env = "env.yaml"
+
+rule step1:
+    output:"Galton_Dataset.pickle"
+    conda: common_env
+    shell: "python Galton_Board/Simulation.py"
+
+rule final:
+    input: rules.step1.output
+    output: expand("r_{r_idx}_c_{c_idx}.nc", r_idx=range(1,11), c_idx=range(1,11))
+    conda: common_env
+    shell: "python Galton_Board/Inference.py"
+

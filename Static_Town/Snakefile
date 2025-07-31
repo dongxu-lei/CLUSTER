@@ -1,0 +1,15 @@
+common_env = "env.yaml"
+
+rule step1:
+    output:
+        "U_day.npy",
+        "X_day.npy"
+    conda: common_env
+    shell: "python Static_Town/Simulation.py"
+
+rule final:
+    input: rules.step1.output
+    output: "day.nc"
+    conda: common_env
+    shell: "python Static_Town/Inference.py"
+

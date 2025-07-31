@@ -1,0 +1,33 @@
+common_env = "env.yaml"
+
+rule Liuzhou_MBNP:
+    input: "Liuzhou.pkl"
+    output: "Liuzhou_MBNP/Countryside_0.nc"
+    conda: common_env
+    shell: "python Realistic_City/Liuzhou_MBNP.py"
+
+rule Liuzhou_MPLN:
+    input: "Liuzhou.pkl"
+    output: "Liuzhou_MPLN/Countryside_0.nc"
+    conda: common_env
+    shell: "python Realistic_City/Liuzhou_MPLN.py"
+
+rule Cixi_MBNP:
+    input: "Cixi.pkl"
+    output: "Cixi_MBNP/trace.nc"
+    conda: common_env
+    shell: "python Realistic_City/Cixi_MBNP.py"
+
+rule Liuzhou_TCM:
+    input: "Liuzhou.pkl"
+    output: "Liuzhou_TCM/Countryside_trace.nc"
+    conda: common_env
+    shell: "python Realistic_City/Temporal_Correlated_Model.py"
+
+rule final:
+    input:
+        rules.Liuzhou_MBNP.output,
+        rules.Liuzhou_MPLN.output,
+        rules.Cixi_MBNP.output,
+        rules.Liuzhou_TCM.output
+

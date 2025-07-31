@@ -1,0 +1,30 @@
+common_env = "env.yaml"
+
+rule step1:
+    output: "xy_data.npy", "commuter800_wanderer200_D1.mp4"
+    conda: common_env
+    shell: "python Dynamic_Town/Trajectory_Simulation.py"
+rule step2:
+    input: rules.step1.output
+    output: "Dynamic_Town.pickle"
+    conda: common_env
+    shell: "python Dynamic_Town/BS_Data_Simulation.py"
+
+rule M_BNP:
+    input: rules.step2.output
+    output: "M_BNP/10.nc"
+    conda: common_env
+    shell: "python Dynamic_Town/Inference_MBNP.py"
+
+rule M_PLN:
+    input: rules.step2.output
+    output: "M_PLN/10.nc"
+    conda: common_env
+    shell: "python Dynamic_Town/Inference_MPLN.py"
+
+rule final:
+    input:
+        rules.M_BNP.output,
+        rules.M_PLN.output
+
+
